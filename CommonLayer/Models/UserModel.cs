@@ -18,8 +18,8 @@ namespace CommonLayer.Models
         [Required]
         [RegularExpression("^[A-Z][A-Z a-z 0-9]{2,}$", ErrorMessage = "Please enter a valid Password ")]
         public string Password { get; set; }
-        //[Required]
-        //[RegularExpression("^[91]?[6-9][0-9]{9}$", ErrorMessage = "Please enter a valid pattern number ")]
-        public int PhoneNumber { get; set; }
+        [Required]
+        [RegularExpression("^[91]?[6-9][0-9]{9}$", ErrorMessage = "Please enter a valid pattern number ")]
+        public long PhoneNumber { get; set; }
     }
 }
