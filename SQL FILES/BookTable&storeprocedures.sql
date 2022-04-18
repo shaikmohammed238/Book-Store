@@ -12,6 +12,7 @@ CREATE TABLE Books
 	BookQuantity int
 	)
 select * from Books
+select * from Usertbl
 Create proc sp_AddBooks(
 	@BookName varchar(100) ,
 	@AuthorName varchar(70) ,

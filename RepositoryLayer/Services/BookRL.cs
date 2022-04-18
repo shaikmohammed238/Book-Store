@@ -103,5 +103,139 @@ namespace RepositoryLayer.Services
                 sqlConnection.Close();
             }
         }
+
+        public string DeleteBook(long bookId)
+        {
+            this.sqlConnection = new SqlConnection(this.Configuration["ConnectionString:BOOKSTORE_db"]);
+            try
+            {
+                using (sqlConnection)
+                {
+                    SqlCommand sqlcmd = new SqlCommand("sp_DeleteBook", sqlConnection);
+                    sqlcmd.CommandType = CommandType.StoredProcedure;
+                    sqlcmd.Parameters.AddWithValue("@BookId",bookId);
+                    sqlConnection.Open();
+                    int value = sqlcmd.ExecuteNonQuery();
+                    if (value > 0)
+                    {
+                        return "Successfully deleted book from BookStore";
+                    }
+                    else
+                    {
+                        return "check this book id ";
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
+        public List<BookModel> GetBookByBookId(long bookId)
+        {
+            this.sqlConnection = new SqlConnection(this.Configuration["ConnectionString:BOOKSTORE_db"]);
+            try
+            {
+                using (sqlConnection)
+                {
+                    List<BookModel> result = new List<BookModel>();
+                    SqlCommand sqlCommand = new SqlCommand("sp_GetBook", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@BookId", bookId);
+                    sqlConnection.Open();
+                    SqlDataReader sqlData = sqlCommand.ExecuteReader();
+                    if (sqlData.HasRows)
+                    {
+                        while (sqlData.Read())
+                        {
+                            BookModel bookModel = new BookModel();
+
+                            bookModel.BookId = Convert.ToInt32(sqlData["BookId"]);
+                            bookModel.BookName = sqlData["BookName"].ToString();
+                            bookModel.AuthorName = sqlData["AuthorName"].ToString();
+                            bookModel.DiscountPriceValue = Convert.ToInt32(sqlData["DiscountPriceValue"]);
+                            bookModel.OriginalPriceValue = Convert.ToInt32(sqlData["OriginalPriceValue"]);
+                            bookModel.BookDescription = sqlData["BookDescription"].ToString();
+                            bookModel.TotalRating = Convert.ToInt32(sqlData["TotalRating"]);
+                            bookModel.RatingCount = Convert.ToInt32(sqlData["RatingCount"]);
+                            bookModel.BookImage = sqlData["BookImage"].ToString();
+                            bookModel.BookQuantity = Convert.ToInt32(sqlData["BookQuantity"]);
+                            result.Add(bookModel);
+                        }
+                        return result;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
+
+        public List<BookModel> GetAllBooks()
+        {
+            this.sqlConnection = new SqlConnection(this.Configuration["ConnectionString:BOOKSTORE_db"]);
+
+            try
+            {
+                using (sqlConnection)
+                {
+                    List<BookModel> result = new List<BookModel>();
+                    SqlCommand sqlCommand = new SqlCommand("sp_GetAllBooks", sqlConnection);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlConnection.Open();
+                    SqlDataReader sqlData = sqlCommand.ExecuteReader();
+                    if (sqlData.HasRows)
+                    {
+                        while (sqlData.Read())
+                        {
+                            BookModel bookModel = new BookModel();
+
+                            bookModel.BookId = Convert.ToInt32(sqlData["BookId"]);
+                            bookModel.BookName = sqlData["BookName"].ToString();
+                            bookModel.AuthorName = sqlData["AuthorName"].ToString();
+                            bookModel.DiscountPriceValue = Convert.ToInt32(sqlData["DiscountPriceValue"]);
+                            bookModel.OriginalPriceValue = Convert.ToInt32(sqlData["OriginalPriceValue"]);
+                            bookModel.BookDescription = sqlData["BookDescription"].ToString();
+                            bookModel.TotalRating = Convert.ToInt32(sqlData["TotalRating"]);
+                            bookModel.RatingCount = Convert.ToInt32(sqlData["RatingCount"]);
+                            bookModel.BookImage = sqlData["BookImage"].ToString();
+                            bookModel.BookQuantity = Convert.ToInt32(sqlData["BookQuantity"]);
+                            result.Add(bookModel);
+                        }
+                        return result;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+        }
     }
 }

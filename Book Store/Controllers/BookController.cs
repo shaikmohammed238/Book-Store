@@ -42,7 +42,7 @@ namespace Book_Store.Controllers
             }
         }
         [HttpPut]
-        [Route("updateBook/{BookId}")]
+        [Route("UpdateBook/{BookId}")]
         public IActionResult UpdateBookDetails(BookModel bookModel)
         {
             try
@@ -55,6 +55,69 @@ namespace Book_Store.Controllers
                 else
                 {
                     return this.Ok(new { success = true, message = $"Book Update Successfully" });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.NotFound(new { Status = false, Message = e.Message });
+            }
+        }
+        [HttpDelete]
+        [Route("DeleteBook/{BookId}")]
+        public IActionResult DeleteBook(long BookId)
+        {
+            try
+            {
+                string result = this.bookBL.DeleteBook(BookId);
+                if (result.Equals(true))
+                {
+                    return this.BadRequest(new { Status = false, Message = $"Book is unable to delete check book id" });
+                }
+                else
+                {
+                    return this.Ok(new { success = true, message = $"Book deleted Successfully from bookstore" });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.NotFound(new { Status = false, Message = e.Message });
+            }
+        }
+        [HttpGet]
+        [Route("GetBook/{BookId}")]
+        public IActionResult GetBookByBookId(long BookId)
+        {
+            try
+            {
+                var result = this.bookBL.GetBookByBookId(BookId);
+                if (result.Equals(true))
+                {
+                    return this.BadRequest(new { Status = false, Message = $"Book is unable to get check book id" });
+                }
+                else
+                {
+                    return this.Ok(new { success = true, message = $"Book get Successfully from bookstore",data=result });
+                }
+            }
+            catch (Exception e)
+            {
+                return this.NotFound(new { Status = false, Message = e.Message });
+            }
+        }
+        [HttpGet]
+        [Route("GetAllBooks")]
+        public IActionResult GetAllBooks()
+        {
+            try
+            {
+                var result = this.bookBL.GetAllBooks();
+                if (result.Equals(true))
+                {
+                    return this.BadRequest(new { Status = false, Message = $"check userid " });
+                }
+                else
+                {
+                    return this.Ok(new { success = true, message = $"Get All books data", data = result });
                 }
             }
             catch (Exception e)
