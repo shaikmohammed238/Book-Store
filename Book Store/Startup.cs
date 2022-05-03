@@ -38,6 +38,16 @@ namespace Book_Store
             services.AddTransient<IUserRL, UserRL>();
             services.AddTransient<IBookBL, BookBL>();
             services.AddTransient<IBookRL, BookRL>();
+            services.AddTransient<ICartBL, CartBL>();
+            services.AddTransient<ICartRL, CartRL>();
+            services.AddTransient<IAddressBL, AddressBL>();
+            services.AddTransient<IAddressRL, AddressRL>();
+            services.AddTransient<IWishListBL, WishListBL>();
+            services.AddTransient<IWishListRL, WishListRL>();
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:4455";
+            });
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdministratorRole",
@@ -84,8 +94,9 @@ namespace Book_Store
                          IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])) // Configuration["JwtToken:SecretKey"]
                      };
                  });
+            
         }
-    
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
